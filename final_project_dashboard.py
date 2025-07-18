@@ -138,7 +138,8 @@ fig_bar_mmse = px.bar(
     labels={'mmse': 'Mean MMSE Score'},
     facet_col='diagnosis',
     text= 'mmse', 
-    color_discrete_sequence=['blue', 'red'], height=500
+    color_discrete_sequence=['blue', 'red'], height=500,
+    category_orders={"educationlevel": ["No Education", "High School", "Bachelors", "Higher"]}
 ) 
 fig_bar_mmse.update_traces(
     texttemplate='%{text:.1f}',  # Formats all text labels to 1 decimal
