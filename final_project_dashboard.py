@@ -72,7 +72,7 @@ symptom_columns = ['confusion', 'disorientation', 'personalitychanges',
                    'difficultycompletingtasks', 'forgetfulness']
 
 # Calculate % of "yes" for each symptom
-symptom_data = {col: (working_df[col] == 'yes').mean() * 100 for col in symptom_columns}
+symptom_data = {col: (working_df[col] == 'Yes').mean() * 100 for col in symptom_columns}
 symptom_df = pd.DataFrame(list(symptom_data.items()), columns=['Symptom', 'Percentage'])
 
 
@@ -94,7 +94,8 @@ fig_box_smoking = px.box(working_df, x='smoking', y='mmse', color='diet_quality'
                          title='MMSE by Smoking Status and Diet Level',
                          color_discrete_sequence=['blue', 'red', 'green'])
 
-
+fig_box_smoking.update_layout(xaxis_title="Smoking")
+fig_box_smoking.update_layout(yaxis_title="MMSE (Mini Mental Statte Exam")
 st.plotly_chart(fig_box_smoking)
 
 #tree with diet, activity, alcohol, and diag
@@ -137,12 +138,14 @@ fig_bar_mmse = px.bar(
     labels={'mmse': 'Mean MMSE Score'},
     facet_col='diagnosis',
     text= 'mmse', 
-    color_discrete_sequence=['blue', 'red']
+    color_discrete_sequence=['blue', 'red'], height=500
 ) 
 fig_bar_mmse.update_traces(
     texttemplate='%{text:.1f}',  # Formats all text labels to 1 decimal
     textposition='outside'       # Optional: improves label visibility
 )
+fig_bar_mmse.update_layout(xaxis_title="Education Level"
+                           , xaxis2_title="Education Level")
 st.plotly_chart(fig_bar_mmse)
 
 
@@ -182,6 +185,7 @@ fig_box_bp = px.box(bp_melted_diag, x='diagnosis', y='Blood Pressure (mmHg)', co
              facet_col='Blood Pressure Type',
              title='Systolic and Diastolic Blood Pressure by Diagnosis Level',
              color_discrete_sequence=['blue', 'red'])
+fig_box_bp.update_layout(xaxis_title="Diagnosis")
 
 st.plotly_chart(fig_box_bp)
  
@@ -205,7 +209,7 @@ fig_bar_ethnicity = px.bar(ethnicity_diagnosis,
              text=ethnicity_diagnosis['percentage'].round(1).astype(str),
              color_discrete_sequence=['blue', 'red'])
 
-
+fig_bar_ethnicity.update_layout(xaxis_title="Ethnicity")
 st.plotly_chart(fig_bar_ethnicity)
 
 
@@ -213,7 +217,7 @@ st.plotly_chart(fig_bar_ethnicity)
 
 depression_by_age = working_df.groupby('age_group')['depression'].value_counts(normalize=True).rename('percentage').reset_index()
 depression_by_age['percentage'] *= 100
-depression_by_age = depression_by_age[depression_by_age['depression'] == 'yes']
+depression_by_age = depression_by_age[depression_by_age['depression'] == 'Yes']
 
 
 fig_bar_depression = px.bar(depression_by_age, x='age_group', y='percentage',
@@ -225,12 +229,14 @@ fig_bar_depression.update_layout(
     title_font_size=15,  # Adjust this value (default is usually ~24)
 )
 
+fig_bar_depression.update_layout(xaxis_title="Age Group")
+
 
 #head injury age
 
 headinjury_by_age = working_df.groupby('age_group')['headinjury'].value_counts(normalize=True).rename('percentage').reset_index()
 headinjury_by_age['percentage'] *= 100
-headinjury_by_age = headinjury_by_age[headinjury_by_age['headinjury'] == 'yes']
+headinjury_by_age = headinjury_by_age[headinjury_by_age['headinjury'] == 'Yes']
 
 fig_bar_headinjury = px.bar(headinjury_by_age, x='age_group', y='percentage',
              title='Percentage of Patients with Head Injuries by Age Group',
@@ -240,6 +246,8 @@ fig_bar_headinjury = px.bar(headinjury_by_age, x='age_group', y='percentage',
 fig_bar_headinjury.update_layout(
     title_font_size=15,  # Adjust this value (default is usually ~24)
 )
+
+fig_bar_headinjury.update_layout(xaxis_title="Age Group")
 
 col1, col2 = st.columns(2)
 with col1:
